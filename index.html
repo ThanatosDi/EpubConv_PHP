@@ -1,0 +1,256 @@
+<?php session_start();?>
+<!DOCTYPE HTML>
+<!--
+	Dimension by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>EPubConv EPub簡轉繁</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<!--[if lte IE 9]><link rel="stylesheet" href="assets/css/ie9.css" /><![endif]-->
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+		<link rel="Shortcut Icon" type="image/x-icon" href="images/epub.ico" />
+		<meta name="google-site-verification" content="16NF_iuEtml79Km7u1uUcdvPydNDOVLG_YSkh8D-HII" />
+		<meta name="description" content="EPubConv 免費將 EPUB 電子書中的內容由簡體中文轉為繁體中文" />
+		<meta property="og:description" content="免費將 EPUB 電子書中的內容由簡體中文轉為繁體中文" />
+		<meta property="og:title" content="EPubConv" />
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content="https://epubconv.kawai.moe" />
+		<meta property="og:image" content="https://epubconv.kawai.moe/images/epub.png" />
+		<meta property="og:site_name" content="EPubConv" />
+		<script type=text/javascript src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+		<script src="//js.file.kawai.moe/layer/v3.0.1/layer.js"></script>
+		
+	</head>
+	<body>
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Header -->
+					<header id="header">
+						<div class="logo">
+							<span class="icon fa-book"></span>
+						</div>
+						<div class="content">
+							<div class="inner">
+								<h1><a href='/'>EPubConv</a></h1>
+								<p><font size='4em'>免費將簡體中文的EPub電子書轉換成繁體中文</font></p>
+							</div>
+						</div>
+						<nav>
+							<ul>
+								<li><a href="#howto"><font size='3em'>如何運作</font></a></li>
+								<li><a href="#upload"><font size='3em'>檔案上傳</font></a></li>
+								<li><a href="#about"><font size='3em'>關於網站</font></a></li>
+								<li><a href="#contact"><font size='3em'>聯絡我</font></a></li>
+								<!--<li><a href="#elements">Elements</a></li>-->
+							</ul>
+						</nav>
+					</header>
+
+				<!-- Main -->
+					<div id="main">
+
+						<!-- howto -->
+							<article id="howto">
+								<h2 class="major">如何運作</h2>
+								<span class="image main"><img src="images/epub.png" alt="" /></span>
+								<p>
+									<font size='4em'>
+									簡單3步驟
+								<ul>
+									<li>1.選擇檔案上傳</li>
+									<li>2.等待系統轉換</li>
+									<li>3.下載檔案</li>
+								</ul>			
+									上傳檔案並等待系統轉換完成後自動跳轉至下載頁面，下載下來的EPub就是繁體中文啦～		
+									</font>
+								</p>
+							</article>
+
+						<!-- upload -->
+							<article id="upload_test">
+								<h2 class="major">檔案上傳</h2>
+								<span class="image main"></span>
+								<p>正在重新建置中</p>
+							</article>
+							
+							<article id="upload">
+								<h2 class="major">檔案上傳</h2>
+								<span class="image main"></span>
+								<?php
+									$Error = @$_GET['Error'];
+									switch( @$Error ){
+										case "UploadError":
+											$Detail = '上傳失敗，請重新上傳，如一直失敗請聯絡管理員';
+											break; 
+										case "DoubleFile":
+											$Detail = '重複上傳，請聯絡管理員排除';
+											break; 
+										case "TypeError":
+											$ErrorFileType = @$_GET['ErrorFileType'];
+											$Detail = '無法上傳 '.$ErrorFileType.' 格式的檔案，請選擇合法 EPub 檔案';
+											break; 
+										default:
+											$Detail='';
+									}
+								?>
+								<form method="post" action="class/upload.php" enctype="multipart/form-data">
+									<p><b><font color=red size='4em'><?php echo $Detail;?></font></b></p>
+									<div class="field">
+										<label for="message"><font size='4em'>檔案名稱:</font></label>
+										<input type="file" name="EPubFile" id="EPubFile" />
+										<input type="hidden" name="token" id="token" value="<?php echo $token = hash('sha512', microtime());?>">
+									</div>
+									<ul class="actions">
+										<li>
+											<button type="submit" id='submit' name='submit' class="special" >上傳</button>
+										</li>
+										<li>
+											<button type="reset" id='reset' name='reset' >重置</button>
+										</li>
+									</ul>
+								</form>
+								<p>
+									<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+									<!-- epubconv.kawai.moe#upload -->
+									<ins class="adsbygoogle"
+										 style="display:block"
+										 data-ad-client="ca-pub-5441808858903508"
+										 data-ad-slot="2282170675"
+										 data-ad-format="auto"></ins>
+									<script>
+									(adsbygoogle = window.adsbygoogle || []).push({});
+									</script>
+								</p>
+							</article>
+
+						<!-- About -->
+							<article id="about">
+								<h2 class="major">關於此網站</h2>
+								<span class="image main"></span>
+								<p>此網頁由<a href='https://kttsite.com' target='_blank'>古丁丁</a>所架設而成，架這個服務的原因是在Github上看到<a href='https://github.com/yen3/convert2tex' target='_blank'> yen3 大大的 convert2tex 專案</a> 再加上很久以前自己也很常用的網站(http://epubconv.mobi/)所以才動手寫這個網頁，當然整個服務都是免費的，如果有BUG還請各位多多告知我囉，等到網站完整沒什麼問題應該就會放在我的 Github 上公開囉，希望大家喜歡｡:.ﾟヽ(*´∀`)ﾉﾟ.:｡</p>
+								
+								<h2 class="major">網頁更新</h2>
+								<span class="image main"></span>
+								<p></p>
+								<p>2017/05/05 - 網站重新建置完成，重新開放，修正以下BUG
+									<ul>
+										<li>檔案名稱編碼轉換</li>
+									</ul>
+								</p>
+								<p>2017/05/04 - 站主腦抽導致網頁資料全部一去不回，正努力重新建置！_(:3 」∠ )_</p>
+								<p>2017/04/18 - 修正以下網頁BUG
+									<ul>
+										<li>上傳文件10M限制問題</li>
+										<li>ASCII轉碼問題修正</li>
+									</ul>
+								</p>
+								<p>2017/04/17 - 網頁正式運作</p>
+								<p>2017/04/16 - 網頁架構放置完成</p>
+								
+								<h2 class="major">感謝</h2>
+								<span class="image main"></span>
+								<p>convert2tex by yen3</p>
+								<p>Set up by Kutinging.</p>
+								<p>Powered by Google Cloud Platform.</p>
+								<p>DESIGN: HTML5 UP</p>
+							</article>
+
+						<!-- Contact -->
+							<article id="contact">
+								<h2 class="major">聯絡我</h2>
+								
+								<ul class="icons">
+									<p><li><a href="#contact" class="icon fa-envelope"><span class="label">Email</span></a>　epubconv@kawai.moe</li></p>
+									<p><li><a href="#contact" class="icon fa-twitter"><span class="label">Twitter</span></a>　N/A</li></p>
+									
+									<p><li><a href="#contact" class="icon fa-facebook"><span class="label">Facebook</span></a>　N/A</li></p>
+									
+									<p><li><a href="#contact" class="icon fa-instagram"><span class="label">Instagram</span></a>　N/A</li></p>
+									
+									<p><li><a href="#contact" class="icon fa-github"><span class="label">GitHub</span></a>　N/A</li></p>
+								</ul>
+								<p>
+									<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+									<!-- epubconv.kawai.moe#contact -->
+									<ins class="adsbygoogle"
+										 style="display:block"
+										 data-ad-client="ca-pub-5441808858903508"
+										 data-ad-slot="6631645070"
+										 data-ad-format="auto"></ins>
+									<script>
+									(adsbygoogle = window.adsbygoogle || []).push({});
+									</script>
+								</p>
+							</article>
+							
+						<!-- DownloadFile -->
+							<article id="StartDownload">
+								<h2 class="major">檔案下載</h2>
+								<span class="image main"></span>
+								<?php
+									$token = @$_GET['Sucessfully'];
+									$EPubDownloadName = @$_GET['EPubName'];
+									if( @$token!=null || @$EPubName!=null){
+										$DownloadUrl = "<a href=class/DownloadFile.php?token=".$token."&EPubDownloadName=".urlencode($EPubDownloadName).">點擊下載　".$EPubDownloadName."</a>";
+									}else{
+										$DownloadUrl = '取得連結失敗';
+									}
+								?>
+								<p><?php echo $DownloadUrl;?></p>
+								<p>
+									<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+									<!-- epubconv.kawai.moe#dl -->
+									<ins class="adsbygoogle"
+										 style="display:block"
+										 data-ad-client="ca-pub-5441808858903508"
+										 data-ad-slot="6880493870"
+										 data-ad-format="auto"></ins>
+									<script>
+									(adsbygoogle = window.adsbygoogle || []).push({});
+									</script>
+								</p>
+							</article>
+					</div>
+
+				<!-- Footer -->
+					<footer id="footer">
+						<p class="copyright">&copy; EPubConv. Design: <a href="https://html5up.net">HTML5 UP</a>.</p>
+					</footer>
+
+			</div>
+
+		<!-- BG -->
+			<div id="bg"></div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/skel.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+			<script>
+				$('#submit').on('click', function(){
+					layer.load(1,{
+						time: 0,
+						shade:[0.5,'#fff']
+					});
+					layer.msg('上傳中&轉換中~請稍候~',{
+						time: 0,
+						offset: '55%'
+					});
+				});
+				$('#reset').on('click', function(){
+					layer.msg('清空上傳的檔案囉~選擇其他檔案上傳吧~',{
+						time: 1500,
+						shade:[0.5,'#fff']
+					});
+				});
+			</script>
+	</body>
+</html>
