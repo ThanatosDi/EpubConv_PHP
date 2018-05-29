@@ -5,6 +5,9 @@
 	html5up.net | @ajlkn
 	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 -->
+<?php
+	echo $Messages = @$_POST['Messages'];
+?>
 <html>
 	<head>
 		<title>EPubConv EPub簡轉繁</title>
@@ -22,11 +25,11 @@
 		<meta property="og:url" content="https://epubconv.kawai.moe" />
 		<meta property="og:image" content="https://epubconv.kawai.moe/images/epub.png" />
 		<meta property="og:site_name" content="EPubConv" />
-		<script type=text/javascript src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-		<script src="//js.file.kawai.moe/layer/v3.0.1/layer.js"></script>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="assets/js/layer.js"></script>
 		
 	</head>
-	<body>
+	<body onload="HiddenButton();">
 
 		<!-- Wrapper -->
 			<div id="wrapper">
@@ -83,37 +86,32 @@
 							<article id="upload">
 								<h2 class="major">檔案上傳</h2>
 								<span class="image main"></span>
+								
 								<?php
-									$Error = @$_GET['Error'];
-									switch( @$Error ){
-										case "UploadError":
-											$Detail = '上傳失敗，請重新上傳，如一直失敗請聯絡管理員';
-											break; 
-										case "DoubleFile":
-											$Detail = '重複上傳，請聯絡管理員排除';
-											break; 
-										case "TypeError":
-											$ErrorFileType = @$_GET['ErrorFileType'];
-											$Detail = '無法上傳 '.$ErrorFileType.' 格式的檔案，請選擇合法 EPub 檔案';
-											break; 
-										default:
-											$Detail='';
+									if($Messages=="TypeError"){
+										echo "<h2><font color='red'> 檔案格式錯誤 </font><h2>";
 									}
 								?>
-								<form method="post" action="class/upload.php" enctype="multipart/form-data">
-									<p><b><font color=red size='4em'><?php echo $Detail;?></font></b></p>
+								<form method="post" action="module/upload.php" enctype="multipart/form-data">
 									<div class="field">
-										<label for="message"><font size='4em'>檔案名稱:</font></label>
+										<label for="message"><font size='4em'>檔案名稱(最大10M):</font></label>
 										<input type="file" name="EPubFile" id="EPubFile" />
-										<input type="hidden" name="token" id="token" value="<?php echo $token = hash('sha512', microtime());?>">
 									</div>
 									<ul class="actions">
-										<li>
-											<button type="submit" id='submit' name='submit' class="special" >上傳</button>
-										</li>
-										<li>
-											<button type="reset" id='reset' name='reset' >重置</button>
-										</li>
+										<div id="recaptcha">
+											<form name="recaptcha" action="index.php" method="POST" onsubmit="return(get_action())">
+											  <div class="g-recaptcha" data-sitekey="6LcceVIUAAAAAEQpFGKXb-ET4zoqfFR58g0hs9v7" data-theme="light" data-size="normal"></div>
+											  <br/>
+											</form>
+										</div>
+										<div id="Button">
+											<li>
+												<button type=\"submit\" id="submit" name="submit" class="special" >上傳</button>
+											</li>
+											<li>
+												<button type="reset" id="reset" name="reset" >重置</button>
+											</li>
+										</div>
 									</ul>
 								</form>
 								<p>
@@ -138,7 +136,16 @@
 								
 								<h2 class="major">網頁更新</h2>
 								<span class="image main"></span>
-								<p></p>
+								<p>2018/04/23 - 更改為第二版本網頁完成，歡迎回報BUG
+									<ul>
+										<li>重新編寫翻譯腳本，直接使用<a href="https://github.com/BYVoid/OpenCC" target='_blank'>OpenCC</a>及7ZIP加快翻譯速度</li>
+										<li>修正翻譯後無法下載問題</li>
+										<li>修正無法上傳epub檔之問題</li>
+										<li>添加機器人驗證</li>
+										<li>重新加入單檔最大10M之限制</li>
+									</ul>
+								</p>
+								<p>2017/07/28 - 更新Email網址，修復yahoo無法寄送到的問題
 								<p>2017/05/05 - 網站重新建置完成，重新開放，修正以下BUG
 									<ul>
 										<li>檔案名稱編碼轉換</li>
@@ -159,6 +166,8 @@
 								<p>convert2tex by yen3</p>
 								<p>Set up by Kutinging.</p>
 								<p>Powered by Google Cloud Platform.</p>
+								<p>OpenCC by BYVoid.</p>
+								<p>7zip by Igor Pavlov.</p>
 								<p>DESIGN: HTML5 UP</p>
 							</article>
 
@@ -167,14 +176,14 @@
 								<h2 class="major">聯絡我</h2>
 								
 								<ul class="icons">
-									<p><li><a href="#contact" class="icon fa-envelope"><span class="label">Email</span></a>　epubconv@kawai.moe</li></p>
-									<p><li><a href="#contact" class="icon fa-twitter"><span class="label">Twitter</span></a>　N/A</li></p>
+									<p><li><a href="#contact" class="icon fa-envelope"><span class="label">Email</span></a>　epubconv@mail.kawai.moe</li></p>
+									<p><li><a href="https://twitter.com/ThanatosDi_" target="_blank" class="icon fa-twitter"><span class="label">Twitter</span></a>　https://twitter.com/ThanatosDi_</li></p>
 									
-									<p><li><a href="#contact" class="icon fa-facebook"><span class="label">Facebook</span></a>　N/A</li></p>
+									<p><li><a href="#contact" target="_blank" class="icon fa-facebook"><span class="label">Facebook</span></a>　N/A</li></p>
 									
-									<p><li><a href="#contact" class="icon fa-instagram"><span class="label">Instagram</span></a>　N/A</li></p>
+									<p><li><a href="#contact" target="_blank" class="icon fa-instagram"><span class="label">Instagram</span></a>　N/A</li></p>
 									
-									<p><li><a href="#contact" class="icon fa-github"><span class="label">GitHub</span></a>　N/A</li></p>
+									<p><li><a href="https://github.com/Kutinging/EpubConv" target="_blank" class="icon fa-github"><span class="label">GitHub</span></a>　https://github.com/Kutinging/EpubConv</li></p>
 								</ul>
 								<p>
 									<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
@@ -195,12 +204,15 @@
 								<h2 class="major">檔案下載</h2>
 								<span class="image main"></span>
 								<?php
-									$token = @$_GET['Sucessfully'];
-									$EPubDownloadName = @$_GET['EPubName'];
-									if( @$token!=null || @$EPubName!=null){
-										$DownloadUrl = "<a href=class/DownloadFile.php?token=".$token."&EPubDownloadName=".urlencode($EPubDownloadName).">點擊下載　".$EPubDownloadName."</a>";
+									if($Messages=="FileNotFound"){
+										$DownloadUrl =  "檔案不存在 <a href='./#upload'>重新上傳 epub 電子書</a>";
 									}else{
-										$DownloadUrl = '取得連結失敗';
+										$EPubDownloadName = @$_GET['f'];
+										if(@$EPubDownloadName!=null && file_exists("epubfiles/{$EPubDownloadName}")){
+											$DownloadUrl = "<a href=module/DownloadFile.php?f={$EPubDownloadName}>點擊下載　{$EPubDownloadName}</a>";
+										}else{
+											$DownloadUrl = '取得連結失敗，已超過下載次數';
+										}
 									}
 								?>
 								<p><?php echo $DownloadUrl;?></p>
@@ -230,27 +242,81 @@
 			<div id="bg"></div>
 
 		<!-- Scripts -->
-			<script src="assets/js/jquery.min.js"></script>
+			    <script src="//www.google.com/recaptcha/api.js" async defer></script>
+				<script language="javascript" type="text/javascript">
+					function HiddenButton(){
+						document.all["Button"].style.display="none";
+						$('.g-recaptcha').show();
+					}
+					function VerifyReCaptcha(GResponse)
+					{
+						$.ajax(
+						{
+							url:"module/VerifyReCaptcha.php",//傳送到後端的網頁名稱
+							type : "POST",
+							dataType: 'html',
+							async: true,
+							data:
+							{
+								reCaptchaResponse: GResponse
+							},
+							success:function(msg)
+							{
+								switch(msg)
+								{
+									case 'OK':
+										//在這裡輸入驗證成功後要呼叫的函數
+										//在本範例中預設是讓 reCaptcha 驗證碼淡出
+										$('.g-recaptcha').fadeOut();
+										document.all["Button"].style.display="inline";
+									break;
+									case 'ERROR':
+										alert('驗證失敗！請再試一次！');
+									break;
+								}
+							},
+							error:function(xhr){
+								alert('發生未預期的錯誤！請再試一次！');
+							},
+						}
+						);
+					}
+					
+					$('#submit').on('click', function(){
+						layer.load(1,{
+							time: 0,
+							shade:[0.5,'#fff']
+						});
+						layer.msg('上傳中&轉換中~請稍候~',{
+							time: 0,
+							offset: '55%'
+						});
+					});   
+					$('#reset').on('click', function(){
+						layer.msg('清空上傳的檔案囉~選擇其他檔案上傳吧~',{
+							time: 1500,
+							shade:[0.5,'#fff']
+						});
+					});
+					
+
+				</script>
+				
+				
+				<script language="javascript" type="text/javascript" >
+					$(document).ready(function(){	
+						var IntervalID = setInterval(function(){
+							if($("#g-recaptcha-response").val()!='')
+							{
+								VerifyReCaptcha($("#g-recaptcha-response").val());
+								clearInterval(IntervalID);
+							}
+						},500);
+					});
+				</script>
+			
 			<script src="assets/js/skel.min.js"></script>
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
-			<script>
-				$('#submit').on('click', function(){
-					layer.load(1,{
-						time: 0,
-						shade:[0.5,'#fff']
-					});
-					layer.msg('上傳中&轉換中~請稍候~',{
-						time: 0,
-						offset: '55%'
-					});
-				});
-				$('#reset').on('click', function(){
-					layer.msg('清空上傳的檔案囉~選擇其他檔案上傳吧~',{
-						time: 1500,
-						shade:[0.5,'#fff']
-					});
-				});
-			</script>
 	</body>
 </html>
